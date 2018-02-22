@@ -1,6 +1,7 @@
 import ckan.plugins as p
 import ckan.plugins.toolkit as tk
 
+from flask import Blueprint
 from flask_graphql import GraphQLView
 from ckanext.graphql.schema import schema
 
