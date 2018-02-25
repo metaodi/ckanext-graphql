@@ -20,6 +20,12 @@ class GraphqlPlugin(p.SingletonPlugin):
 
     def get_blueprint(self):
         blueprint = Blueprint('graphql', self.__module__)
-        blueprint.add_url_rule('/graphql', view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True, context={'session': model.Session}))
+        blueprint.add_url_rule(
+            '/graphql',
+            view_func=GraphQLView.as_view('graphql',
+                                          schema=schema,
+                                          graphiql=True,
+                                          context={'session': model.Session})
+            )
 
-        return blueprint 
+        return blueprint
