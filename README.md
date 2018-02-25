@@ -2,11 +2,10 @@
 
 [![Build Status](https://travis-ci.org/metaodi/ckanext-graphql.svg?branch=master)](https://travis-ci.org/metaodi/ckanext-graphql)
 
+**The extension is still in development and not yet ready for production use.**
+
 This extension aims to provide a [GraphQL](http://graphql.org/) endpoint to query the CKAN.
 In the future, it might be considered an alternative to the [CKAN Action API](http://docs.ckan.org/en/latest/api/#action-api-reference).
-
-The extension is still in development and not yet ready for production use.
-
 
 ## Installation
 
