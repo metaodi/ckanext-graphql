@@ -36,3 +36,4 @@ The endpoint `/graphql` can be directly called with GraphQL-queries.
 - [ ] Check if data should be read from Solr
 - [ ] Add interface to change schema from other CKAN extensions (i.e. add own models)
 - [ ] Support custom schemas from [ckanext-scheming](https://github.com/ckan/ckanext-scheming)
+- [x] Add travis build
