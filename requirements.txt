@@ -2,3 +2,4 @@ graphene==2.0.1
 graphene-sqlalchemy==2.0.0
 Flask-GraphQL==1.4.1
 SQLAlchemy==0.9.7        
+ckantoolkit==0.0.3
