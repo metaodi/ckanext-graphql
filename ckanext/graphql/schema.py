@@ -25,7 +25,7 @@ class Query(graphene.ObjectType):
 
     def resolve_packages(self, info):
         query = Package.get_query(info)
-        return query.filter(PackageModel.private is False).all()
+        return query.filter(PackageModel.private == False).all()  # noqa 
 
     def resolve_resources(self, info):
         query = Resource.get_query(info)
