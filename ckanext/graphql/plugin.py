@@ -1,5 +1,6 @@
 import ckan.plugins as p
 import ckan.plugins.toolkit as tk
+from ckan import model
 
 from flask import Blueprint
 from flask_graphql import GraphQLView
@@ -19,6 +20,6 @@ class GraphqlPlugin(p.SingletonPlugin):
 
     def get_blueprint(self):
         blueprint = Blueprint('graphql', self.__module__)
-        blueprint.add_url_rule('/graphql', view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True))
+        blueprint.add_url_rule('/graphql', view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True, context={'session': model.Session}))
 
         return blueprint 
