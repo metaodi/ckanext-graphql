@@ -29,7 +29,8 @@ class TestEndpoints(helpers.FunctionalTestBase):
         url = '/graphql'
 
         app = self._get_test_app()
-        response = app.get(url, status=400)
+        res = app.get(url, status=400)
+        response = json.loads(res.body)
 
         assert 'errors' in response
         errors = response['errors']
@@ -44,7 +45,8 @@ class TestEndpoints(helpers.FunctionalTestBase):
         url = '/graphql?query={hello}'
 
         app = self._get_test_app()
-        response = app.get(url)
+        res = app.get(url)
+        response = json.loads(res.body)
 
         assert 'data' in response
         eq_(response['data'], {'hello', 'world'})
