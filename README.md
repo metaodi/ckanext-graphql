@@ -4,6 +4,8 @@
 
 **The extension is still in development and not yet ready for production use.**
 
+Requirement: CKAN >= 2.7
+
 This extension aims to provide a [GraphQL](http://graphql.org/) endpoint to query the CKAN.
 In the future, it might be considered an alternative to the [CKAN Action API](http://docs.ckan.org/en/latest/api/#action-api-reference).
 
