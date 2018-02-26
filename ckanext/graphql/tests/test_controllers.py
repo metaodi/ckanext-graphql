@@ -49,4 +49,4 @@ class TestEndpoints(helpers.FunctionalTestBase):
         response = json.loads(res.body)
 
         assert 'data' in response
-        eq_(response['data'], {'hello', 'world'})
+        eq_(response['data'], {'hello': 'World'})
