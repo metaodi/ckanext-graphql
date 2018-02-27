@@ -132,10 +132,16 @@ class Vocabulary(SQLAlchemyObjectType):
         interfaces = (relay.Node, )
 
 
+class SearchResult(graphene.Union):
+    class Meta:
+        types = (Package, Group)
+
+
 class Query(graphene.ObjectType):
     hello = graphene.String(description='A typical hello world')
 
     node = relay.Node.Field()
+    search = graphene.List(SearchResult, q=graphene.String())  # List field for search results
 
     packages = graphene.List(Package)
     all_packages = SQLAlchemyConnectionField(Package)
@@ -146,6 +152,24 @@ class Query(graphene.ObjectType):
     group_extras = graphene.List(GroupExtra)
     tags = graphene.List(Tag)
     vocabularies = graphene.List(Vocabulary)
+
+    def resolve_search(self, info, **args):
+        q = args.get("q")  # Search query
+
+        # Get queries
+        pkg_query = Package.get_query(info)
+        group_query = Group.get_query(info)
+
+        # Query Packages
+        pkgs = pkg_query.filter((PackageModel.title.contains(q)) |
+                                (PackageModel.name.contains(q)) |
+                                (PackageModel.notes.contains(q))).all()
+
+        # Query Groups
+        groups = group_query.filter((GroupModel.name.contains(q)) |
+                                    (GroupModel.description.contains(q))).all()
+
+    	return pkgs + groups
 
     def resolve_packages(self, info):
         query = Package.get_query(info)

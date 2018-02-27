@@ -53,12 +53,32 @@ Query all packages incl. groups and organization:
 }
 ```
 
+Search for groups or packages that contain the term `bau`:
+
+```
+{
+  search(q: "bau") {
+    __typename
+    ... on Group {
+      name
+    }
+    ... on Package {
+      name
+    }
+  }
+}
+
+```
+
 # TODO
 
-- [ ] Support all/more models
-- [ ] Add support for [Relay](https://facebook.github.io/relay/)
+- [x] Support all/more models
+- [x] Add support for [Relay](https://facebook.github.io/relay/)
+- [x] Add travis build
+- [ ] Merge PackageExtra in Package
+- [x] Add possibility to search for packages or groups (see [example](http://docs.graphene-python.org/projects/sqlalchemy/en/latest/examples/#search-all-models-with-union))
 - [ ] Add possibility for mutations
 - [ ] Check if data should be read from Solr
 - [ ] Add interface to change schema from other CKAN extensions (i.e. add own models)
+- [ ] Add interface to change output before returning it (analog to `before_view`)
 - [ ] Support custom schemas from [ckanext-scheming](https://github.com/ckan/ckanext-scheming)
-- [x] Add travis build
