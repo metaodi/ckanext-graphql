@@ -2,7 +2,6 @@ from sqlalchemy.ext.declarative import declarative_base
 
 import graphene
 from graphene import relay
-from graphql_relay import from_global_id
 
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 
@@ -17,6 +16,7 @@ from ckan.model.vocabulary import Vocabulary as CKANVocabulary
 
 # graphene-sqlalchemy expects models that are based on declarative_base
 Base = declarative_base()
+
 
 class PackageModel(CKANPackage, Base):
     pass
@@ -88,7 +88,7 @@ class Package(SQLAlchemyObjectType):
         exclude_fields = ['owner_org', 'private']
 
     ckan_id = graphene.String()
-    groups = relay.ConnectionField(GroupConnection, description='The groups of this package')
+    groups = relay.ConnectionField(GroupConnection)
     organization = graphene.Field(Group)
 
     def resolve_ckan_id(self, info):
@@ -97,11 +97,12 @@ class Package(SQLAlchemyObjectType):
     def resolve_groups(self, info):
         query = Group.get_query(info)
         query = query.join(MemberModel,
-                           MemberModel.group_id == GroupModel.id and \
-                           MemberModel.table_name == 'package' ).\
-                join(PackageModel, PackageModel.id == MemberModel.table_id).\
-                filter(MemberModel.state == 'active').\
-                filter(GroupModel.type == 'group')
+                           MemberModel.group_id == GroupModel.id and
+                           MemberModel.table_name == 'package')\
+                     .join(PackageModel,
+                           PackageModel.id == MemberModel.table_id)\
+                     .filter(MemberModel.state == 'active')\
+                     .filter(GroupModel.type == 'group')
         query = query.filter(MemberModel.table_id == self.id)
         return query.all()
 
@@ -141,7 +142,7 @@ class Query(graphene.ObjectType):
     hello = graphene.String(description='A typical hello world')
 
     node = relay.Node.Field()
-    search = graphene.List(SearchResult, q=graphene.String())  # List field for search results
+    search = graphene.List(SearchResult, q=graphene.String())
 
     packages = graphene.List(Package)
     all_packages = SQLAlchemyConnectionField(Package)
@@ -169,7 +170,7 @@ class Query(graphene.ObjectType):
         groups = group_query.filter((GroupModel.name.contains(q)) |
                                     (GroupModel.description.contains(q))).all()
 
-    	return pkgs + groups
+        return pkgs + groups
 
     def resolve_packages(self, info):
         query = Package.get_query(info)
@@ -186,18 +187,14 @@ class Query(graphene.ObjectType):
 
     def resolve_organizations(self, info):
         query = Group.get_query(info)
-        return query.filter(GroupModel.is_organization == True).all()
+        return query.filter(GroupModel.is_organization == True).all()  # noqa
 
     def resolve_groups(self, info):
         query = Group.get_query(info)
-        return query.filter(GroupModel.is_organization == False).all()
+        return query.filter(GroupModel.is_organization == False).all()  # noqa
 
     def resolve_group_extras(self, info):
         query = GroupExtra.get_query(info)
-        return query.all()
-
-    def resolve_member(self, info):
-        query = Member.get_query(info)
         return query.all()
 
     def resolve_tagss(self, info):
@@ -212,4 +209,14 @@ class Query(graphene.ObjectType):
         return 'World'
 
 
-schema = graphene.Schema(query=Query, types=[Package, Resource, PackageExtra, Group, Tag, Vocabulary])
+schema = graphene.Schema(
+    query=Query,
+    types=[
+        Package,
+        Resource,
+        PackageExtra,
+        Group,
+        Tag,
+        Vocabulary
+    ]
+)
