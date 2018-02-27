@@ -30,6 +30,29 @@ By default, it serves [GraphiQL](https://github.com/graphql/graphiql), an in-bro
 
 The endpoint `/graphql` can be directly called with GraphQL-queries.
 
+## Example queries
+
+Query all packages incl. groups and organization:
+
+```
+{
+  packages {
+    name
+    ckanId
+    organization {
+      name
+    }
+    groups {
+      edges {
+        group: node {
+          name
+        }
+      }
+    }
+  }
+}
+```
+
 # TODO
 
 - [ ] Support all/more models
